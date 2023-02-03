@@ -36,7 +36,7 @@ final class IMCView: UIView {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.systemFont(ofSize: 25, weight: .medium)
         textField.placeholder = "Seu peso: 89.0"
-        textField.keyboardType = .numberPad
+        textField.keyboardType = .decimalPad
         return textField
     }()
     
@@ -45,7 +45,7 @@ final class IMCView: UIView {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.systemFont(ofSize: 25, weight: .medium)
         textField.placeholder = "Sua altura: 1.89"
-        textField.keyboardType = .numberPad
+        textField.keyboardType = .decimalPad
         return textField
     }()
     
@@ -88,8 +88,9 @@ final class IMCView: UIView {
     
     // MARK: - Get information User
     @objc func getUserInformations() {
-        guard let userHeight = userHeightTextField.text,
-              let userWeight = userWeightTextField.text,
+        
+        guard let userHeight = userHeightTextField.text?.replacingOccurrences(of: ",", with: "."),
+              let userWeight = userWeightTextField.text?.replacingOccurrences(of: ",", with: "."),
               let userHeightDouble = Double(userHeight),
               let userWeightDouble = Double(userWeight)
         else {
@@ -108,6 +109,7 @@ extension IMCView: IMCViewInput {
     func displayImage(imageName: String) {
         self.imcImageView.isHidden = false
         self.imcImageView.image = UIImage(named: imageName)
+        endEditing(true)
     }
     
     // MARK: - Display Error
